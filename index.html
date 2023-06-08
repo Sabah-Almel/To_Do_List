@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family: sans-serif;
+        }
+        form .parent,.result{
+            margin: 0px auto;
+            width: 500px;
+            text-align: center;
+            padding: 20px;
+        }
+        .parent #txt{
+            width: 350px;
+            padding: 10px;
+            border: none;
+            caret-color: #f95413;
+            background-color: #f4e7d1;
+        }
+        .parent #txt:focus{
+            outline: none;
+        }
+        .parent #txt::placeholder {
+            color: black;
+            transition-duration: 0.3s;
+        }
+        .parent #txt:focus::placeholder {
+            opacity: 0;
+        }
+        .parent #sub{
+            padding: 10px;
+            width: 100px;
+            background-color: #f95413;
+            border: #f95413;
+            color: white;
+        }
+        .result{
+            margin-top: -10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .result div{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f4e7d1;
+            width: 460px;
+            padding: 5px 10px;
+        }
+        .result p{
+            font-size: 18px;
+            margin: 0;
+        }
+        .result button{
+            background-color: #f95413;
+            color: white;
+            border: #fead94;
+            width: 80px;
+            padding: 7px ;
+        }
+        .parent #txt,.parent #sub,.result button,.result div{
+            border-radius: 10px;
+        }
+        
+        @media (max-width:767px) {
+            form .parent{
+                width: 300px;
+            }
+            form {
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .parent #txt{
+                width: 250px;               
+            }
+            .parent #sub{
+               margin: 10px 0 0;
+            }
+            .result{
+                width: 300px;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <form action="">
+        <div class="parent">
+            <input type="text" id="txt" placeholder="Add task">
+            <input type="submit" id="sub">
+        </div>
+    </form>
+    <div class="result"></div>
+    <script>
+        // variable
+        let text=document.querySelector(".parent #txt")
+        let submit=document.querySelector(".parent #sub")
+        let result=document.querySelector(".result")
+        let x=[]
+        function remove(objArray, value) {
+            for (let i =0 ; i <objArray.length; i++) {
+                if (objArray[i].title === value) {
+                objArray.splice(i, 1);
+                }
+            }
+        }
+        if(localStorage.div){
+            x=JSON.parse(localStorage.div);
+            for(let ele of x){
+                createDiv(ele.title)
+            } 
+        }
+        // variable
+        // stop submit
+        document.forms[0].onsubmit=function(e){
+            e.preventDefault();
+        }
+        // stop submit
+        // function to create
+        function createObj(content){
+            createDiv(content)
+            x.push({title:content});
+            let string =JSON.stringify(x)
+            localStorage.setItem("div",string)
+        }
+        function createDiv(content){
+            let div=document.createElement("div")
+                let p=document.createElement("p")
+                let button=document.createElement("button")
+                button.textContent="Delete"
+                
+                button.onclick=function(){
+                    div.remove()
+                    remove(x,content)
+                    string=JSON.stringify(x)
+                    localStorage.setItem("div",string);
+                } 
+                p.textContent=content;
+                div.append(p)
+                div.append(button)
+                result.append(div)
+        }
+        // function to create
+        // get task from input and add on click
+        submit.onclick=function(){
+            if(text.value && !Number(text.value.slice(0,1))){
+                // create div
+                createObj(text.value)
+                // create div
+            }
+            text.value=""
+        }
+        // get task from input and add on click
+    </script>
+</body>
+</html>
